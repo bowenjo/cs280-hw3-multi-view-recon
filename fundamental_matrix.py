@@ -22,15 +22,14 @@ def fundamental_matrix(matches):
 	"""
 
 	## Normalize
-    ## -------------------------------------------------------------
-
-
+   	## -------------------------------------------------------------
 	N = matches.shape[0]
 
 	# convert 2d points to homogeneous coordinates
 	pts_1_orig = np.hstack((matches[:, :2], np.ones((N,1)))).T
 	pts_2_orig = np.hstack((matches[:, 2:], np.ones((N,1)))).T
 
+	# just to compare residuals against ---> delete in final draft
 	F_opencv, mask = cv2.findFundamentalMat(pts_1_orig.T,pts_2_orig.T,cv2.FM_8POINT)
 
 	# find normalization matrices
@@ -69,6 +68,8 @@ def fundamental_matrix(matches):
 	d_1_2 = np.diag(pts_2_orig.T @ F @ pts_1_orig) / np.linalg.norm(F @ pts_1_orig, axis=0)
 	d_2_1 = np.diag(pts_1_orig.T @ F.T @ pts_2_orig) / np.linalg.norm(F.T @ pts_2_orig, axis=0)
 
+	
+	# confusion on piazza over correct formulation of residual. Below is the handout's version. 
 	# d_1_2 = np.abs(np.diag(pts_1_orig.T @ F @ pts_2_orig)) / np.linalg.norm(F @ pts_2_orig, axis=0)
 	# d_2_1 = np.abs(np.diag(pts_2_orig.T @ F @ pts_1_orig)) / np.linalg.norm(F @ pts_1_orig, axis=0)
 
