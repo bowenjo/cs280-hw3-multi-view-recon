@@ -65,14 +65,21 @@ def fundamental_matrix(matches):
 
 	## Residual Error
 	## ------------------------------------------------------------
-	d_1_2 = np.diag(pts_2_orig.T @ F @ pts_1_orig) / np.linalg.norm(F @ pts_1_orig, axis=0)
-	d_2_1 = np.diag(pts_1_orig.T @ F.T @ pts_2_orig) / np.linalg.norm(F.T @ pts_2_orig, axis=0)
+	res_err = 0
+	for i in range(N):
+		p1 = pts_1_orig[:,i,None]
+		p2 = pts_2_orig[:,i,None]
 
-	# confusion on piazza over correct formulation of residual. Below is the handout's version. 
-	# d_1_2 = np.abs(np.diag(pts_1_orig.T @ F @ pts_2_orig)) / np.linalg.norm(F @ pts_2_orig, axis=0)
-	# d_2_1 = np.abs(np.diag(pts_2_orig.T @ F @ pts_1_orig)) / np.linalg.norm(F @ pts_1_orig, axis=0)
+		d_1_2 = (p1.T @ F @ p2) / np.linalg.norm(F @ p2) # distance between x1 and epipolar line Fx2
+		d_2_1 = (p2.T @ F @ p1) / np.linalg.norm(F @ p1) # distance between x2 and epipolar line Fx1	
 
-	res_err = np.sum(d_1_2**2 + d_2_1**2) / 2*N
+		# confusion on piazza over correct formulation of residual. Above is what was given in the handout. 
+		# d_1_2 = (p2.T@F@p1) / np.linalg.norm(F@p1)
+		# d_2_1 = (p1.T@F.T@p2) / np.linalg.norm(F.T@p2)
+
+		res_err += (d_1_2**2 + d_2_1**2) 
+
+	res_err = res_err/(2*N)
 
 	return(F, res_err)
 
