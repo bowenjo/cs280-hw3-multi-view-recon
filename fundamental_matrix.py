@@ -1,5 +1,5 @@
 import numpy as np 
-import cv2
+# import cv2
 
 
 def fundamental_matrix(matches):
@@ -30,7 +30,7 @@ def fundamental_matrix(matches):
 	pts_2_orig = np.hstack((matches[:, 2:], np.ones((N,1)))).T
 
 	# just to compare residuals against ---> delete in final draft
-	F_opencv, mask = cv2.findFundamentalMat(pts_1_orig.T,pts_2_orig.T,cv2.FM_8POINT)
+	# F_opencv, mask = cv2.findFundamentalMat(pts_1_orig.T,pts_2_orig.T,cv2.FM_8POINT)
 
 	# find normalization matrices
 	T_1 = normalization_matrix(pts_1_orig)
@@ -57,7 +57,7 @@ def fundamental_matrix(matches):
 
 	# constrain F to having rank 2
 	U,S,V = np.linalg.svd(F)
-	F = U@np.diag([S[0], S[1], 0])@V
+	F = U @ np.diag([S[0], S[1], 0]) @ V
 
 	## Denormalize
 	## ------------------------------------------------------------
@@ -68,7 +68,6 @@ def fundamental_matrix(matches):
 	d_1_2 = np.diag(pts_2_orig.T @ F @ pts_1_orig) / np.linalg.norm(F @ pts_1_orig, axis=0)
 	d_2_1 = np.diag(pts_1_orig.T @ F.T @ pts_2_orig) / np.linalg.norm(F.T @ pts_2_orig, axis=0)
 
-	
 	# confusion on piazza over correct formulation of residual. Below is the handout's version. 
 	# d_1_2 = np.abs(np.diag(pts_1_orig.T @ F @ pts_2_orig)) / np.linalg.norm(F @ pts_2_orig, axis=0)
 	# d_2_1 = np.abs(np.diag(pts_2_orig.T @ F @ pts_1_orig)) / np.linalg.norm(F @ pts_1_orig, axis=0)
@@ -83,7 +82,7 @@ def normalization_matrix(pts):
 	mu = np.mean(pts, axis=1).reshape(3,1)
 
 	# scale the mean distance to  sqrt(2)
-	mean_dist = np.mean(np.linalg.norm(pts - mu, axis=0))
+	mean_dist = np.mean(np.linalg.norm((pts - mu)[:2,:], axis=0))
 	sigma = np.sqrt(2)/mean_dist
 
 	# consturct the normalization matrix

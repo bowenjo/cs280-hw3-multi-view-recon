@@ -45,8 +45,8 @@ def reconstruct_3d(name):
     matches = np.array([list(map(float, line.split())) for line in lines])
 
     # this is a N x 4 where:
-    # matches(i,1:2) is a point (w,h) in the first image
-    # matches(i,3:4) is the corresponding point in the second image
+    # matches[i,:2] is a point (w,h) in the first image
+    # matches[i,2:] is the corresponding point in the second image
 
     if VISUALIZE:
         fig = plt.figure()
@@ -112,4 +112,4 @@ def reconstruct_3d(name):
 
 
 if __name__ == "__main__":
-    reconstruct_3d('library')
+    reconstruct_3d('house')
