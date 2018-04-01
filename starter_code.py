@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
 from fundamental_matrix import fundamental_matrix
+from find_3d_points import find_3d_points
 #from mpl_toolkits.mplot3d import Axes3D
 #from IPython import embed
 
@@ -69,47 +70,47 @@ def reconstruct_3d(name):
 
     (F, res_err) = fundamental_matrix(matches)  # <------------------------------------- You write this one!
     print("Residual in F = %s"%(res_err))
-#     E = K2.T @ F @ K1
+    E = K2.T @ F @ K1
 
-#     ## -------------------------------------------------------------------------
-#     ## ---------- Rotation and translation of camera 2 ------------------------
+    ## -------------------------------------------------------------------------
+    ## ---------- Rotation and translation of camera 2 ------------------------
 
-#     # R : cell array with the possible rotation matrices of second camera
-#     # t : cell array of the possible translation vectors of second camera
-#     (R, t) = find_rotation_translation()  # <------------------------------------- You write this one!
+    # R : cell array with the possible rotation matrices of second camera
+    # t : cell array of the possible translation vectors of second camera
+    (R, t) = find_rotation_translation()  # <------------------------------------- You write this one!
 
-#     # Find R2 and t2 from R,t such that largest number of points lie in front
-#     # of the image planes of the two cameras
-#     P1 = K1 @ np.concatenate([np.identity(3), np.zeros((3, 1))], axis=1)
+    # Find R2 and t2 from R,t such that largest number of points lie in front
+    # of the image planes of the two cameras
+    P1 = K1 @ np.concatenate([np.identity(3), np.zeros((3, 1))], axis=1)
 
-#     # the number of points in front of the image planes for all combinations
-#     num_points = np.zeros([len(t), len(R)])
-#     errs = np.full([len(t), len(R)], np.inf)
+    # the number of points in front of the image planes for all combinations
+    num_points = np.zeros([len(t), len(R)])
+    errs = np.full([len(t), len(R)], np.inf)
 
-#     for ti in range(len(t)):
-#         t2 = t[ti]
-#         for ri in range(len(R)):
-#             R2 = R[ri]
-#             P2 = K2 @ np.concatenate([R2, t2[:, np.newaxis]], axis=1)
-#             (points_3d, errs[ti,ri]) = find_3d_points() #<---------------------- You write this one!
-#             Z1 = points_3d[:,2]
-#             Z2 = (points_3d @ R2[2,:].T + t2[2])
-#             num_points[ti,ri] = np.sum(np.logical_and(Z1>0,Z2>0))
-#     (ti,ri) = np.where(num_points==np.max(num_points))
-#     j = 0 # pick one out the best combinations
-#     print("Reconstruction error = (%s,%s)"%(errs[ti[j],ri[j]]))
+    for ti in range(len(t)):
+        t2 = t[ti]
+        for ri in range(len(R)):
+            R2 = R[ri]
+            P2 = K2 @ np.concatenate([R2, t2[:, np.newaxis]], axis=1)
+            (points_3d, errs[ti,ri]) = find_3d_points() #<---------------------- You write this one!
+            Z1 = points_3d[:,2]
+            Z2 = (points_3d @ R2[2,:].T + t2[2])
+            num_points[ti,ri] = np.sum(np.logical_and(Z1>0,Z2>0))
+    (ti,ri) = np.where(num_points==np.max(num_points))
+    j = 0 # pick one out the best combinations
+    print("Reconstruction error = (%s,%s)"%(errs[ti[j],ri[j]]))
 
-#     t2 = t[ti[j]]
-#     R2 = R[ri[j]]
-#     P2 = K2 @ np.concatenate([R2, t2[:, np.newaxis]], axis=1)
+    t2 = t[ti[j]]
+    R2 = R[ri[j]]
+    P2 = K2 @ np.concatenate([R2, t2[:, np.newaxis]], axis=1)
 
-#     # % compute the 3D points with the final P2
-#     points, _ = find_3d_points() # <---------------------------------------------- You have already written this one!
+    # % compute the 3D points with the final P2
+    points, _ = find_3d_points() # <---------------------------------------------- You have already written this one!
 
-#     ## -------- plot points and centers of cameras ----------------------------
+    ## -------- plot points and centers of cameras ----------------------------
 
-# plot_3d() #<-------------------------------------------------------------- You write this one!
+plot_3d() #<-------------------------------------------------------------- You write this one!
 
 
 if __name__ == "__main__":
-    reconstruct_3d('house')
+    reconstruct_3d('library')
