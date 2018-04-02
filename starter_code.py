@@ -7,7 +7,12 @@ from matplotlib.lines import Line2D
 from fundamental_matrix import fundamental_matrix
 from find_rotation_translation import find_rotation_translation
 from find_3d_points import find_3d_points
+from plot_3d import plot_3d
+
+import math
+
 from mpl_toolkits.mplot3d import Axes3D
+
 #from IPython import embed
 
 '''
@@ -113,7 +118,19 @@ def reconstruct_3d(name):
 
     ## -------- plot points and centers of cameras ----------------------------
 
-#plot_3d() #<-------------------------------------------------------------- You write this one!
+    cam1_back = np.array([0, 0, 0])
+    cam1_front = np.array([0, 0, 1])
+
+    print('t2: {}'.format(t2))
+
+    cam2_back = cam1_back @ R2.T + t2
+    cam2_front = cam1_front @ R2.T + t2
+
+    print('center1: {}, center2: {}'.format(cam2_back, cam2_front))
+
+    cam_centers = np.vstack((cam1_back, cam1_front, cam2_back, cam2_front))
+
+    plot_3d(points, cam_centers) #<-------------------------------------------------------------- You write this one!
 
 
 if __name__ == "__main__":
