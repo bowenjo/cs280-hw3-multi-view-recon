@@ -39,8 +39,14 @@ def find_3d_points(P1,P2,matches):
 		A = np.array([[(P1[0,0] - x1[0]*P1[2,0]), (P1[0,1] - x1[0]*P1[2,1]), (P1[0,2] - x1[0]*P1[2,2])],
 					  [(P1[1,0] - x1[1]*P1[2,0]), (P1[1,1] - x1[1]*P1[2,1]), (P1[1,2] - x1[1]*P1[2,2])],
 					  [(P2[0,0] - x2[0]*P2[2,0]), (P2[0,1] - x2[0]*P2[2,1]), (P2[0,2] - x2[0]*P2[2,2])],
-					  [(P2[1,0] - x2[1]*P2[2,0]), (P2[1,1] - x2[1]*P2[2,1]), (P2[1,2] - x2[1]*P2[2,2])]
+					  [(P2[1,0] - x2[1]*P2[2,0]), (P2[1,1] - x2[1]*P2[2,1]), (P2[1,2] - x2[1]*P2[2,2])],
 					 ]).reshape(4,3)
+
+		# A = np.array([[(P1[0,0] - x1[0]*P1[2,0]), (P1[0,1] - x1[0]*P1[2,1]), (P1[0,2] - x1[0]*P1[2,2]), (P1[0,3] - x1[0]*P1[2,3])],
+		# 			  [(P1[1,0] - x1[1]*P1[2,0]), (P1[1,1] - x1[1]*P1[2,1]), (P1[1,2] - x1[1]*P1[2,2]), (P1[1,3] - x1[1]*P1[2,3])],
+		# 			  [(P2[0,0] - x2[0]*P2[2,0]), (P2[0,1] - x2[0]*P2[2,1]), (P2[0,2] - x2[0]*P2[2,2]), (P2[0,3] - x2[0]*P2[2,3])],
+		# 			  [(P2[1,0] - x2[1]*P2[2,0]), (P2[1,1] - x2[1]*P2[2,1]), (P2[1,2] - x2[1]*P2[2,2]), (P2[1,3] - x2[1]*P2[2,3])],
+		# 			 ]).reshape(4,4)
 
 		b = np.array([[(P1[0,3] - x1[0]*P1[2,3])],
 					  [(P1[1,3] - x1[1]*P1[2,3])],
@@ -49,9 +55,11 @@ def find_3d_points(P1,P2,matches):
 
 		# solve the linear system
 		X = np.linalg.lstsq(A,b)[0]
+		# U,S,V = np.linalg.svd(A)
+		# X = V[3,:,None]
 
 		# store the points
-		points_3d[:,i, None] = X
+		points_3d[:,i, None] = X #X[0:3]/X[3]
 
 		# calculate reconstruction error
 		X = np.vstack((X,np.zeros((1,1)))) # convert to homogenous
@@ -63,10 +71,12 @@ def find_3d_points(P1,P2,matches):
 
 		rec_err[i] =  (np.linalg.norm(x1 - pr1) + np.linalg.norm(x2 - pr2)) / 2 # mean distance between projection of 3D point and 2D point in each image
 
+
 	# take the average reconstruction error across all points 
+	# print(np.median(rec_err))
 	rec_err = np.mean(rec_err)
 
-	return(points_3d, rec_err)
+	return(points_3d.T, rec_err)
 
 
 
