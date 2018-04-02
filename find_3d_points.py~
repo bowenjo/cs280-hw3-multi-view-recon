@@ -66,7 +66,7 @@ def find_3d_points(P1,P2,matches):
 	# take the average reconstruction error across all points 
 	rec_err = np.mean(rec_err)
 
-	return(points_3d.T, rec_err)
+	return(points_3d, rec_err)
 
 
 

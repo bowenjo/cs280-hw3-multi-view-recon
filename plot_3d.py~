@@ -16,6 +16,8 @@ def plot_3d(points, cam_centers):
 	- cam_centers: 4x3 array, 3D points of camera centers
 	'''
 
+	points = points.T # keep it in Nx3 format
+
 	fig = plt.figure()
 	ax = fig.add_subplot(111, projection='3d')
 
