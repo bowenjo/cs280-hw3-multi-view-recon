@@ -47,6 +47,7 @@ def reconstruct_3d(name):
     K1 = scipy.io.loadmat(data_dir + name + "1_K.mat")["K"]
     K2 = scipy.io.loadmat(data_dir + name + "2_K.mat")["K"]
 
+
     if name == "house":
         # confusion on piazza over inverted x-axis. Switched these two parameters to get the correct orientation in final reconstruction
         K1[1,1] = -K1[1,1]
@@ -117,6 +118,8 @@ def reconstruct_3d(name):
     R2 = R[ri[j]]
     P2 = K2 @ np.concatenate([R2, t2[:, np.newaxis]], axis=1)
 
+    print('t: \n{} \nR: \n{}'.format(t2, R2))
+
     # % compute the 3D points with the final P2
     points, _ = find_3d_points(P1,P2,matches) # <---------------------------------------------- You have already written this one!
 
@@ -125,4 +128,5 @@ def reconstruct_3d(name):
     plot_3d(points, R2, t2) #<-------------------------------------------------------------- You write this one!
 
 if __name__ == "__main__":
-    reconstruct_3d('library')
+    reconstruct_3d('house')
+    #reconstruct_3d('library')

@@ -4,8 +4,6 @@ import cv2
 import matplotlib
 import matplotlib.pyplot as plt 
 
-import scipy
-
 def find_rotation_translation(E_mat):
 	"""
 	Computes the essential matrix from the fundamental matrix and the calibration matrices.
@@ -29,7 +27,7 @@ def find_rotation_translation(E_mat):
 				[0, 0, 1]])
 
 	# take svd of essential matrix
-	U, s, V = scipy.linalg.svd(E_mat)
+	U, s, V = np.linalg.svd(E_mat)
 	V = V.T
 
 	# initialize R and t cell arrays

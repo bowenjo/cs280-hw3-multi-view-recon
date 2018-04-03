@@ -1,4 +1,5 @@
 import numpy as np 
+import scipy
 
 def find_3d_points(P1,P2,matches):
 	"""
@@ -42,7 +43,7 @@ def find_3d_points(P1,P2,matches):
 					  x2[1]*P2[2,:] - P2[1,:]])
 
 		# take SVD of A
-		U,S,V = np.linalg.svd(A)
+		U,S,V = scipy.linalg.svd(A)
 		X = V[3,:,None] # X is the right singular vector associated with the smallest singular value of A
 
 		# store the points

@@ -25,6 +25,7 @@ def plot_3d(points, R, t):
 
 	# plot the points and the camera positions
 	fig = plt.figure()
+	fig.set_size_inches(15, 10)
 	ax = fig.add_subplot(111, projection='3d')
 
 	ax.scatter(points[:,0], points[:,1], points[:,2], c='b', marker='.', alpha=.3)
@@ -34,6 +35,8 @@ def plot_3d(points, R, t):
 	ax.set_xlim([-5,5])
 	ax.set_ylim([-5,5])
 	ax.set_zlim([-1,6])
+
+	ax.view_init(0, -90)
 
 	plt.show()
 	
