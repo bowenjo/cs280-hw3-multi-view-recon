@@ -1,5 +1,4 @@
 import numpy as np 
-import cv2
 
 
 def fundamental_matrix(matches):
@@ -28,9 +27,6 @@ def fundamental_matrix(matches):
 	# convert 2d points to homogeneous coordinates
 	pts_1_orig = np.hstack((matches[:, :2], np.ones((N,1)))).T
 	pts_2_orig = np.hstack((matches[:, 2:], np.ones((N,1)))).T
-
-	# just to compare residuals against ---> delete in final draft
-	F_opencv, mask = cv2.findFundamentalMat(pts_1_orig.T,pts_2_orig.T,cv2.FM_8POINT)
 
 	# find normalization matrices
 	T_1 = normalization_matrix(pts_1_orig)

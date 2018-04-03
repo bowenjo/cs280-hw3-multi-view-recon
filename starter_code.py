@@ -42,6 +42,11 @@ def reconstruct_3d(name):
     K1 = scipy.io.loadmat(data_dir + name + "1_K.mat")["K"]
     K2 = scipy.io.loadmat(data_dir + name + "2_K.mat")["K"]
 
+    if name == "house":
+        # confusion on piazza over inverted x-axis. Switched these two parameters to get the correct orientation in final reconstruction
+        K1[1,1] = -K1[1,1]
+        K2[1,1] = -K2[1,1]
+
 
     # corresponding points
     lines = open(data_dir + name + "_matches.txt").readlines()
@@ -94,7 +99,6 @@ def reconstruct_3d(name):
         for ri in range(len(R)):
             R2 = R[ri]
             P2 = K2 @ np.concatenate([R2, t2[:, np.newaxis]], axis=1)
-
             (points_3d, errs[ti,ri]) = find_3d_points(P1,P2,matches) #<---------------------- You write this one!
             Z1 = points_3d[:,2]
             Z2 = (points_3d @ R2[2,:].T + t2[2])
@@ -114,7 +118,6 @@ def reconstruct_3d(name):
     ## -------- plot points and centers of cameras ----------------------------
 
 #plot_3d() #<-------------------------------------------------------------- You write this one!
-
 
 if __name__ == "__main__":
     reconstruct_3d('house')
