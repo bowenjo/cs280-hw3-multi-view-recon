@@ -10,7 +10,6 @@ from find_3d_points import find_3d_points
 from plot_3d import plot_3d
 
 import math
-
 from mpl_toolkits.mplot3d import Axes3D
 
 #from IPython import embed
@@ -46,7 +45,6 @@ def reconstruct_3d(name):
     print(data_dir + name + "1_K.mat")
     K1 = scipy.io.loadmat(data_dir + name + "1_K.mat")["K"]
     K2 = scipy.io.loadmat(data_dir + name + "2_K.mat")["K"]
-
 
     if name == "house":
         # confusion on piazza over inverted x-axis. Switched these two parameters to get the correct orientation in final reconstruction
@@ -116,9 +114,8 @@ def reconstruct_3d(name):
 
     t2 = t[ti[j]]
     R2 = R[ri[j]]
-    P2 = K2 @ np.concatenate([R2, t2[:, np.newaxis]], axis=1)
 
-    print('t: \n{} \nR: \n{}'.format(t2, R2))
+    P2 = K2 @ np.concatenate([R2, t2[:, np.newaxis]], axis=1)
 
     # % compute the 3D points with the final P2
     points, _ = find_3d_points(P1,P2,matches) # <---------------------------------------------- You have already written this one!
